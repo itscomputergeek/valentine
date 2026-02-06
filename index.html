@@ -387,29 +387,16 @@
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Music Button */
-        .music-btn {
+        /* Spotify Container */
+        .spotify-container {
             margin-top: 20px;
-            padding: 10px 24px;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
-            background: linear-gradient(135deg, rgba(201, 168, 124, 0.2) 0%, rgba(232, 213, 183, 0.2) 100%);
-            border: 1px solid rgba(201, 168, 124, 0.4);
-            color: #e8d5b7;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .music-btn:hover {
-            background: linear-gradient(135deg, rgba(201, 168, 124, 0.4) 0%, rgba(232, 213, 183, 0.4) 100%);
-            box-shadow: 0 5px 20px rgba(201, 168, 124, 0.3);
-        }
-
-        .music-btn.playing {
-            background: linear-gradient(135deg, #c9a87c 0%, #e8d5b7 100%);
-            color: #1a1a2e;
+        .spotify-container iframe {
+            display: block;
         }
 
         .song-credit {
@@ -443,11 +430,6 @@
             </div>
         </div>
 
-        <!-- Audio - Cars Outside by James Arthur -->
-        <audio id="bgMusic" loop>
-            <source src="cars-outside.mp3" type="audio/mpeg">
-            <!-- Fallback: Add your own MP3 file named "cars-outside.mp3" in the same folder -->
-        </audio>
 
         <!-- Success Page -->
         <div class="success-page" id="successPage">
@@ -483,10 +465,20 @@
             <p class="signature">— forever yours</p>
             <div class="floating-elements">✧ ⋆ ✧</div>
 
-            <!-- Music Control -->
-            <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
-                <span id="musicIcon">🎵</span> Play Music
-            </button>
+            <!-- Spotify Embed - Cars Outside by James Arthur -->
+            <div class="spotify-container">
+                <iframe
+                    id="spotifyPlayer"
+                    style="border-radius:12px"
+                    src=""
+                    width="300"
+                    height="80"
+                    frameBorder="0"
+                    allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
+                </iframe>
+            </div>
             <p class="song-credit">♪ Cars Outside - James Arthur</p>
         </div>
     </div>
@@ -640,38 +632,9 @@
             document.getElementById('successPage').classList.add('active');
             createConfetti();
 
-            // Play "Cars Outside" by James Arthur
-            const music = document.getElementById('bgMusic');
-            music.volume = 0.7;
-            music.play().then(() => {
-                updateMusicButton(true);
-            }).catch(e => {
-                // If autoplay blocked, user can click button
-                console.log('Autoplay blocked, user interaction needed');
-            });
-        }
-
-        function toggleMusic() {
-            const music = document.getElementById('bgMusic');
-            if (music.paused) {
-                music.play();
-                updateMusicButton(true);
-            } else {
-                music.pause();
-                updateMusicButton(false);
-            }
-        }
-
-        function updateMusicButton(isPlaying) {
-            const btn = document.getElementById('musicBtn');
-            const icon = document.getElementById('musicIcon');
-            if (isPlaying) {
-                btn.classList.add('playing');
-                btn.innerHTML = '<span id="musicIcon">🎵</span> Playing...';
-            } else {
-                btn.classList.remove('playing');
-                btn.innerHTML = '<span id="musicIcon">🎵</span> Play Music';
-            }
+            // Load Spotify player - "Cars Outside" by James Arthur
+            const spotifyPlayer = document.getElementById('spotifyPlayer');
+            spotifyPlayer.src = "https://open.spotify.com/embed/track/4NsPgRYUdHu2Q5JRNgUYgY?utm_source=generator&theme=0";
         }
 
         function createConfetti() {
