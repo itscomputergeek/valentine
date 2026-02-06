@@ -388,21 +388,79 @@
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Music Container */
-        .music-container {
-            margin-top: 15px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        /* Hidden YouTube Player */
+        #ytPlayerContainer {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
         }
 
-        .music-container iframe {
-            display: block;
-            margin: 0 auto;
+        /* Music Toggle Button */
+        .music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 168, 124, 0.4);
+            background: rgba(10, 10, 25, 0.85);
+            backdrop-filter: blur(10px);
+            color: #e8d5b7;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .music-toggle:hover {
+            background: rgba(201, 168, 124, 0.3);
+            transform: scale(1.1);
+        }
+
+        .music-toggle.visible {
+            display: flex;
+        }
+
+        .music-toggle .bars {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+            height: 16px;
+        }
+
+        .music-toggle .bar {
+            width: 3px;
+            background: #e8d5b7;
+            border-radius: 2px;
+            animation: soundbar 0.8s ease-in-out infinite;
+        }
+
+        .music-toggle .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .music-toggle .bar:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+        .music-toggle .bar:nth-child(3) { height: 10px; animation-delay: 0.4s; }
+        .music-toggle .bar:nth-child(4) { height: 12px; animation-delay: 0.1s; }
+
+        .music-toggle.paused .bar {
+            animation: none;
+            height: 3px !important;
+        }
+
+        @keyframes soundbar {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.4); }
         }
 
         .song-credit {
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 0.75rem;
             color: #666;
             font-style: italic;
@@ -418,6 +476,21 @@
     <div class="nebula nebula-1"></div>
     <div class="nebula nebula-2"></div>
     <div class="moon"></div>
+
+    <!-- Hidden YouTube Player -->
+    <div id="ytPlayerContainer">
+        <div id="ytPlayer"></div>
+    </div>
+
+    <!-- Music Toggle Button -->
+    <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">
+        <div class="bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </button>
 
     <div class="container">
         <!-- Question Page -->
@@ -467,19 +540,6 @@
             <p class="signature">— forever yours</p>
             <div class="floating-elements">✧ ⋆ ✧</div>
 
-            <!-- YouTube Embed - Cars Outside by James Arthur -->
-            <div class="music-container">
-                <iframe
-                    id="youtubePlayer"
-                    width="300"
-                    height="170"
-                    src=""
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    style="border-radius:12px;">
-                </iframe>
-            </div>
             <p class="song-credit">♪ Cars Outside - James Arthur</p>
         </div>
     </div>
@@ -628,14 +688,68 @@
             }
         }
 
+        // YouTube IFrame API
+        let ytPlayer = null;
+        let isMusicPlaying = false;
+
+        // Load YouTube API
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+
         function sayYes() {
             document.getElementById('questionPage').classList.add('hidden');
             document.getElementById('successPage').classList.add('active');
             createConfetti();
 
-            // Load YouTube player - "Cars Outside" by James Arthur (with autoplay)
-            const youtubePlayer = document.getElementById('youtubePlayer');
-            youtubePlayer.src = "https://www.youtube.com/embed/2ukLuAVsXKY?autoplay=1&loop=1&playlist=2ukLuAVsXKY";
+            // Show music toggle button
+            document.getElementById('musicToggle').classList.add('visible');
+
+            // Create YouTube player and autoplay
+            if (!ytPlayer) {
+                ytPlayer = new YT.Player('ytPlayer', {
+                    height: '1',
+                    width: '1',
+                    videoId: '2ukLuAVsXKY',
+                    playerVars: {
+                        autoplay: 1,
+                        loop: 1,
+                        playlist: '2ukLuAVsXKY',
+                        controls: 0,
+                        disablekb: 1,
+                        fs: 0,
+                        modestbranding: 1
+                    },
+                    events: {
+                        onReady: function(event) {
+                            event.target.setVolume(70);
+                            event.target.playVideo();
+                            isMusicPlaying = true;
+                        },
+                        onStateChange: function(event) {
+                            if (event.data === YT.PlayerState.PLAYING) {
+                                isMusicPlaying = true;
+                                document.getElementById('musicToggle').classList.remove('paused');
+                            }
+                        }
+                    }
+                });
+            } else {
+                ytPlayer.playVideo();
+            }
+        }
+
+        function toggleMusic() {
+            if (!ytPlayer) return;
+            if (isMusicPlaying) {
+                ytPlayer.pauseVideo();
+                isMusicPlaying = false;
+                document.getElementById('musicToggle').classList.add('paused');
+            } else {
+                ytPlayer.playVideo();
+                isMusicPlaying = true;
+                document.getElementById('musicToggle').classList.remove('paused');
+            }
         }
 
         function createConfetti() {
