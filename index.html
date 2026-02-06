@@ -388,15 +388,15 @@
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Hidden YouTube Player */
+        /* Hidden YouTube Player - stays on screen but invisible */
         #ytPlayerContainer {
             position: fixed;
-            top: -9999px;
-            left: -9999px;
+            bottom: 0;
+            left: 0;
             width: 1px;
             height: 1px;
-            opacity: 0;
-            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
         }
 
         /* Music Toggle Button */
@@ -710,11 +710,11 @@
                 ytPlayer = new YT.Player('ytPlayer', {
                     height: '1',
                     width: '1',
-                    videoId: '2ukLuAVsXKY',
+                    videoId: 'oTpwRLqXMCE',
                     playerVars: {
                         autoplay: 1,
                         loop: 1,
-                        playlist: '2ukLuAVsXKY',
+                        playlist: 'oTpwRLqXMCE',
                         controls: 0,
                         disablekb: 1,
                         fs: 0,
