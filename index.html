@@ -387,15 +387,15 @@
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Spotify Container */
-        .spotify-container {
+        /* Music Container */
+        .music-container {
             margin-top: 20px;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .spotify-container iframe {
+        .music-container iframe {
             display: block;
         }
 
@@ -465,18 +465,17 @@
             <p class="signature">— forever yours</p>
             <div class="floating-elements">✧ ⋆ ✧</div>
 
-            <!-- Spotify Embed - Cars Outside by James Arthur -->
-            <div class="spotify-container">
+            <!-- YouTube Embed - Cars Outside by James Arthur -->
+            <div class="music-container">
                 <iframe
-                    id="spotifyPlayer"
-                    style="border-radius:12px"
-                    src=""
+                    id="youtubePlayer"
                     width="300"
                     height="80"
-                    frameBorder="0"
-                    allowfullscreen=""
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy">
+                    src=""
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    style="border-radius:12px;">
                 </iframe>
             </div>
             <p class="song-credit">♪ Cars Outside - James Arthur</p>
@@ -632,9 +631,9 @@
             document.getElementById('successPage').classList.add('active');
             createConfetti();
 
-            // Load Spotify player - "Cars Outside" by James Arthur
-            const spotifyPlayer = document.getElementById('spotifyPlayer');
-            spotifyPlayer.src = "https://open.spotify.com/embed/track/4NsPgRYUdHu2Q5JRNgUYgY?utm_source=generator&theme=0";
+            // Load YouTube player - "Cars Outside" by James Arthur (with autoplay)
+            const youtubePlayer = document.getElementById('youtubePlayer');
+            youtubePlayer.src = "https://www.youtube.com/embed/2ukLuAVsXKY?autoplay=1&loop=1&playlist=2ukLuAVsXKY";
         }
 
         function createConfetti() {
