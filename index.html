@@ -15,7 +15,7 @@
         body {
             font-family: 'Cormorant Garamond', serif;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -184,7 +184,7 @@
             position: relative;
             z-index: 10;
             text-align: center;
-            padding: 30px 40px;
+            padding: 25px 30px;
             background: rgba(10, 10, 25, 0.85);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -194,6 +194,7 @@
                 0 0 40px rgba(138, 43, 226, 0.1),
                 inset 0 1px 0 rgba(255,255,255,0.1);
             max-width: 380px;
+            margin: 20px auto;
         }
 
         /* Question Page */
@@ -311,9 +312,9 @@
         }
 
         .success-image {
-            width: 90px;
-            height: 90px;
-            margin: 12px auto;
+            width: 70px;
+            height: 70px;
+            margin: 8px auto;
             border-radius: 50%;
             overflow: hidden;
             border: 2px solid rgba(201, 168, 124, 0.5);
@@ -327,14 +328,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
+            font-size: 32px;
         }
 
         .divider {
             width: 45px;
             height: 1px;
             background: linear-gradient(90deg, transparent, #c9a87c, transparent);
-            margin: 18px auto;
+            margin: 12px auto;
         }
 
         .poetry {
@@ -347,7 +348,7 @@
         }
 
         .poetry .verse {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .poetry .opening {
@@ -363,7 +364,7 @@
         }
 
         .signature {
-            margin-top: 20px;
+            margin-top: 12px;
             font-size: 0.85rem;
             color: #666;
             letter-spacing: 2px;
@@ -371,7 +372,7 @@
 
         .floating-elements {
             font-size: 1rem;
-            margin-top: 15px;
+            margin-top: 8px;
             opacity: 0.5;
             letter-spacing: 8px;
         }
@@ -389,7 +390,7 @@
 
         /* Music Container */
         .music-container {
-            margin-top: 20px;
+            margin-top: 15px;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
@@ -397,6 +398,7 @@
 
         .music-container iframe {
             display: block;
+            margin: 0 auto;
         }
 
         .song-credit {
@@ -470,7 +472,7 @@
                 <iframe
                     id="youtubePlayer"
                     width="300"
-                    height="80"
+                    height="170"
                     src=""
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
