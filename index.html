@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            background: #000;
+        }
+
+        /* Galaxy Background */
+        .galaxy-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(120, 80, 180, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(80, 120, 200, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(60, 40, 100, 0.5) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 70%, rgba(150, 100, 200, 0.2) 0%, transparent 40%),
+                linear-gradient(180deg, #0a0a15 0%, #1a1025 50%, #0d0d1a 100%);
+            z-index: 0;
+        }
+
+        /* Milky Way Band */
+        .milky-way {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(135deg,
+                    transparent 0%,
+                    transparent 30%,
+                    rgba(180, 160, 220, 0.03) 40%,
+                    rgba(200, 180, 240, 0.08) 50%,
+                    rgba(180, 160, 220, 0.03) 60%,
+                    transparent 70%,
+                    transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Stars Container */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle ease-in-out infinite;
+        }
+
+        .star.bright {
+            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .star.colored {
+            background: #aaccff;
+            box-shadow: 0 0 4px 1px rgba(170, 200, 255, 0.5);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            border-radius: 50%;
+            animation: shoot 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0); opacity: 0; }
+            5% { opacity: 1; }
+            20% { transform: translateX(300px) translateY(150px); opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        /* Moon */
+        .moon {
+            position: fixed;
+            top: 8%;
+            right: 12%;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f5f3ce 0%, #e8e4b8 50%, #d4d0a0 100%);
+            box-shadow:
+                0 0 40px 10px rgba(245, 243, 206, 0.3),
+                0 0 80px 30px rgba(245, 243, 206, 0.1),
+                inset -10px -5px 20px rgba(0,0,0,0.15);
+            z-index: 3;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            width: 12px;
+            height: 12px;
+            background: rgba(180, 175, 140, 0.4);
+            border-radius: 50%;
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 40px;
+            width: 18px;
+            height: 18px;
+            background: rgba(180, 175, 140, 0.3);
+            border-radius: 50%;
+        }
+
+        /* Nebula Glow */
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 1;
+            pointer-events: none;
+            animation: nebula-pulse 8s ease-in-out infinite;
+        }
+
+        .nebula-1 {
+            bottom: 10%;
+            left: 5%;
+            width: 300px;
+            height: 200px;
+            background: rgba(138, 43, 226, 0.15);
+        }
+
+        .nebula-2 {
+            top: 20%;
+            left: 60%;
+            width: 250px;
+            height: 180px;
+            background: rgba(65, 105, 225, 0.12);
+            animation-delay: -4s;
+        }
+
+        @keyframes nebula-pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 30px 40px;
+            background: rgba(10, 10, 25, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(138, 43, 226, 0.1),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            max-width: 380px;
+        }
+
+        /* Question Page */
+        .question-page h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 12px;
+            color: #e8d5b7;
+            letter-spacing: 2px;
+        }
+
+        .heart-icon {
+            width: 70px;
+            height: 70px;
+            margin: 12px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+            animation: gentle-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .question-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #fff;
+            margin: 15px 0;
+            font-weight: 300;
+        }
+
+        .retry-text {
+            font-size: 0.95rem;
+            color: #c9a87c;
+            margin-bottom: 12px;
+            min-height: 20px;
+            font-style: italic;
+        }
+
+        .buttons-area {
+            position: relative;
+            height: 90px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 11px 32px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #c9a87c 0%, #e8d5b7 100%);
+            color: #1a1a2e;
+            box-shadow: 0 5px 25px rgba(201, 168, 124, 0.3);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(201, 168, 124, 0.5);
+        }
+
+        .btn-no {
+            background: rgba(255,255,255,0.08);
+            color: #999;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-no:hover {
+            border-color: rgba(255,255,255,0.4);
+            color: #bbb;
+            background: rgba(255,255,255,0.12);
+        }
+
+        /* Success Page */
+        .success-page {
+            display: none;
+            text-align: center;
+        }
+
+        .success-page.active {
+            display: block;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .question-page.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-page h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: #e8d5b7;
+            margin-bottom: 12px;
+            letter-spacing: 3px;
+        }
+
+        .success-image {
+            width: 90px;
+            height: 90px;
+            margin: 12px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(201, 168, 124, 0.5);
+            box-shadow: 0 10px 40px rgba(138, 43, 226, 0.2);
+        }
+
+        .placeholder-heart {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1025 0%, #0d0d1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+        }
+
+        .divider {
+            width: 45px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c9a87c, transparent);
+            margin: 18px auto;
+        }
+
+        .poetry {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.85;
+            font-style: italic;
+            padding: 0 8px;
+        }
+
+        .poetry .verse {
+            margin-bottom: 15px;
+        }
+
+        .poetry .opening {
+            font-size: 1.05rem;
+            color: #e8d5b7;
+            margin-bottom: 18px;
+            font-weight: 400;
+        }
+
+        .poetry .highlight {
+            color: #c9a87c;
+            font-weight: 600;
+        }
+
+        .signature {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+            letter-spacing: 2px;
+        }
+
+        .floating-elements {
+            font-size: 1rem;
+            margin-top: 15px;
+            opacity: 0.5;
+            letter-spacing: 8px;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            animation: confetti-fall 4s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Galaxy Background -->
+    <div class="galaxy-bg"></div>
+    <div class="milky-way"></div>
+    <div class="stars-container" id="starsContainer"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="moon"></div>
+
+    <div class="container">
+        <!-- Question Page -->
+        <div class="question-page" id="questionPage">
+            <h1>A Question</h1>
+            <div class="heart-icon">🤍</div>
+            <p class="question-text">Will you be my Valentine?</p>
+            <p class="retry-text" id="retryText"></p>
+            <div class="buttons-area" id="buttonsArea">
+                <button class="btn btn-yes" id="yesBtn" onclick="sayYes()">Yes</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+            </div>
+        </div>
+
+        <!-- Success Page -->
+        <div class="success-page" id="successPage">
+            <h1>For You</h1>
+            <div class="success-image">
+                <div class="placeholder-heart">🤍</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="poetry">
+                <p class="opening">Today, they questioned me about the universe,<br>
+                So I spoke <span class="highlight">your name</span>.</p>
+
+                <div class="verse">
+                    Your eyes are vast like cosmic seas,<br>
+                    Holding stars in their waves.
+                </div>
+
+                <div class="verse">
+                    Your lips, when they open,<br>
+                    Whole galaxies are born.
+                </div>
+
+                <div class="verse">
+                    Your nose is the place<br>
+                    Where the universe comes to <span class="highlight">breathe</span>.
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <p class="signature">— forever yours</p>
+            <div class="floating-elements">✧ ⋆ ✧</div>
+        </div>
+    </div>
+
+    <script>
+        // Create stars
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+
+                // Random star types
+                if (Math.random() > 0.9) {
+                    star.classList.add('bright');
+                }
+                if (Math.random() > 0.85) {
+                    star.classList.add('colored');
+                }
+
+                const size = Math.random() * 2.5 + 0.5;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDuration = (Math.random() * 4 + 2) + 's';
+                star.style.animationDelay = Math.random() * 4 + 's';
+
+                container.appendChild(star);
+            }
+
+            // Shooting stars
+            for (let i = 0; i < 3; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.top = (Math.random() * 50) + '%';
+                shootingStar.style.left = (Math.random() * 50) + '%';
+                shootingStar.style.animationDelay = (i * 5 + Math.random() * 3) + 's';
+                container.appendChild(shootingStar);
+            }
+        }
+
+        createStars();
+
+        // Button logic
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const buttonsArea = document.getElementById('buttonsArea');
+        const retryText = document.getElementById('retryText');
+        let noClickCount = 0;
+        let buttonsInitialized = false;
+
+        const retryMessages = [
+            "Are you sure?",
+            "Think again...",
+            "Please reconsider",
+            "I won't give up",
+            "Just say yes",
+            "Pretty please?",
+            "One more chance",
+            "I'm still waiting",
+            "You know you want to",
+            "Just one yes...",
+            "I believe in us",
+            "Take your time",
+            "Still here, waiting",
+            "My heart is yours"
+        ];
+
+        // Initialize button positions
+        function initButtons() {
+            if (!buttonsInitialized) {
+                const areaWidth = buttonsArea.offsetWidth;
+                const areaHeight = buttonsArea.offsetHeight;
+
+                // Position Yes button
+                yesBtn.style.position = 'absolute';
+                yesBtn.style.left = (areaWidth / 2 - yesBtn.offsetWidth / 2 - 50) + 'px';
+                yesBtn.style.top = '20px';
+
+                // Position No button
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = (areaWidth / 2 - noBtn.offsetWidth / 2 + 50) + 'px';
+                noBtn.style.top = '20px';
+
+                buttonsInitialized = true;
+            }
+        }
+
+        // Wait for page load then init
+        window.addEventListener('load', initButtons);
+        setTimeout(initButtons, 100);
+
+        function moveButton() {
+            initButtons();
+            noClickCount++;
+
+            retryText.textContent = retryMessages[(noClickCount - 1) % retryMessages.length];
+
+            const areaWidth = buttonsArea.offsetWidth;
+            const areaHeight = buttonsArea.offsetHeight;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            // Calculate bounds within buttons area
+            const padding = 5;
+            const maxX = areaWidth - btnWidth - padding;
+            const maxY = areaHeight - btnHeight - padding;
+
+            // Get Yes button position
+            const yesBtnLeft = parseFloat(yesBtn.style.left) || 0;
+            const yesBtnTop = parseFloat(yesBtn.style.top) || 0;
+            const yesBtnWidth = yesBtn.offsetWidth;
+            const yesBtnHeight = yesBtn.offsetHeight;
+
+            let randomX, randomY;
+            let attempts = 0;
+
+            // Find position that doesn't overlap Yes button
+            do {
+                randomX = padding + Math.random() * (maxX - padding);
+                randomY = padding + Math.random() * (maxY - padding);
+                attempts++;
+
+                // Check overlap with Yes button
+                const margin = 15;
+                const overlapsYes = (
+                    randomX < yesBtnLeft + yesBtnWidth + margin &&
+                    randomX + btnWidth > yesBtnLeft - margin &&
+                    randomY < yesBtnTop + yesBtnHeight + margin &&
+                    randomY + btnHeight > yesBtnTop - margin
+                );
+
+                if (!overlapsYes || attempts > 50) break;
+            } while (true);
+
+            // Move No button
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Make yes button slightly bigger
+            if (noClickCount > 2) {
+                const scale = Math.min(1.15, 1 + noClickCount * 0.012);
+                yesBtn.style.transform = `scale(${scale})`;
+            }
+        }
+
+        function sayYes() {
+            document.getElementById('questionPage').classList.add('hidden');
+            document.getElementById('successPage').classList.add('active');
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const colors = ['#c9a87c', '#e8d5b7', '#fff', '#d4af37', '#8a2be2', '#4169e1'];
+
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = (Math.random() * 8 + 4) + 'px';
+                    confetti.style.height = (Math.random() * 8 + 4) + 'px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.opacity = Math.random() * 0.6 + 0.4;
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 60);
+            }
+        }
+    </script>
+</body>
+</html>
